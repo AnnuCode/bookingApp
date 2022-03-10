@@ -1,4 +1,4 @@
-# React Hooks in Action
+# Booking app created with React Hooks
 This bookings app is created by me to learn & practice about React hooks. Text which I referred to learn is the book  [React Hooks in Action](https://www.manning.com/books/react-hooks-in-action?a_aid=r51&a_bid=b49082e3&chan=gh) by John Larsen, published by Manning.
 
 ## Setup
