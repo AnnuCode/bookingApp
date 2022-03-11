@@ -12,7 +12,7 @@ export default function UsersList(){
     const [error, setError] = useState(null)
    
    useEffect (() =>{
-       getData("http://localhost:3001/users/")
+       getData("https://my-json-server.typicode.com/AnnuCode/JSON/users")
        .then(
            resp=>{setUsers(resp)
            setIsLoading(false)

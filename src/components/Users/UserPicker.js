@@ -6,7 +6,7 @@ export default function UserPicker () {
   const [users, setUsers] = useState(null)
 
   useEffect(()=>{
-    fetch("http://localhost:3001/users/")
+    fetch("https://my-json-server.typicode.com/AnnuCode/JSON/users")
     .then(resp => resp.json())
     .then(data => setUsers(data))
   }, [])
