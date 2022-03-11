@@ -41,7 +41,7 @@ export default function BookablesList () {
 
   useEffect(()=>{
     dispatch({type: "FETCH_BOOKABLES_REQUEST"})
-    getData("http://my-json-server.typicode.com/AnnuCode/JSON/bookables")
+    getData("https://my-json-server.typicode.com/AnnuCode/JSON/bookables")
     .then(bookables=> 
       dispatch({
         type:"FETCH_BOOKABLES_SUCCESS",
