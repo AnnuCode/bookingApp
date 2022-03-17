@@ -1,8 +1,8 @@
-import BookablesList from "./BookablesList";
+import BookablesView from "./bookablesView";
 export default function BookablesPage () {
   return (
     <main className="bookables-page">
-      <BookablesList/>
+      <BookablesView/>
     </main>
   );
 }

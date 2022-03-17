@@ -1,29 +1,22 @@
 
 
 
-import {Fragment, useReducer, useEffect} from "react"
-import {days,sessions} from "../../static.json";
+import { useEffect, useRef} from "react"
+
 
 import {FaArrowRight} from "react-icons/fa"
-import reducer from "./reducer";
+
 import getData from "../../utils/api";
 import Spinner from "../UI/Spinner"
 
-const initialState = {
-  group:"Rooms",
-  bookableIndex: 0,
-  hasDetails: true,
-  bookables: [],
-  isLoading: true,
-  error: false
-} 
-export default function BookablesList () {
+
+export default function BookablesList ({state, dispatch}) {
 
  
+  const nextButtonRef = useRef()
+ 
 
-  const [state, dispatch] = useReducer(reducer, initialState)
-
-  const {group, bookableIndex, hasDetails, bookables} = state
+  const {group, bookableIndex,  bookables} = state
   const {isLoading, error} = state
 
   
@@ -33,11 +26,15 @@ export default function BookablesList () {
   
   
 
-  const bookable = bookablesInGroup[bookableIndex]
+  
 
   
 
   const groups = [...new Set(bookables.map((b)=>b.group))]
+
+  
+
+  
 
   useEffect(()=>{
     dispatch({type: "FETCH_BOOKABLES_REQUEST"})
@@ -51,7 +48,7 @@ export default function BookablesList () {
         type:"FETCH_BOOKABLES_FAIL",
         payload: err}))
   
-  }, [])
+  }, [dispatch])
 
   function nextBookable(){
     dispatch({
@@ -70,13 +67,9 @@ export default function BookablesList () {
       type: "SET_BOOKABLE",
       payload: selectedIndex
     })
+    nextButtonRef.current.focus()
   }
-  function toggleDetails(){
-    dispatch({
-      type: "TOGGLE_HAS_DETAILS"
-      
-    })
-  }
+  
 
   if (isLoading){
     return <p> <Spinner /> Loading bookables... </p>
@@ -86,7 +79,7 @@ export default function BookablesList () {
     return <p> {error.message} </p>
   }
   return (
-<> 
+
  <div>
     
     <select value={group} onChange={(e)=>(changeGroup(e))} >
@@ -110,46 +103,14 @@ export default function BookablesList () {
       ))}
     </ul>
     <p>
-    <button className="btn" onClick={nextBookable} autoFocus>
+    <button className="btn" onClick={nextBookable} ref={nextButtonRef} autoFocus>
         <FaArrowRight/>
         <span>Next</span>
     </button>
     </p>
     </div>
 
-      {
-        bookable && (<div className="bookable-details">
-          <div className="item">
-            <div className="item-header">
-              <h2>{bookable.title}</h2>
-              <span className="controls">
-                <label>
-                  <input type="checkbox" checked={hasDetails} 
-                onChange={toggleDetails}/>
-                  Show details
-                </label> 
-              </span>
-              
-            </div>
-            <p>{bookable.notes}</p>
-            
-            {hasDetails && (
-                <div className="item-details">
-                  <h3>Availability</h3>
-                  <div className="bookable-availability">
-                    <ul>
-                      {bookable.days.sort()
-                      .map((d)=>(<li>{days[d]}</li>))}
-                    </ul>
-                    <ul>
-                      {bookable.sessions.sort().map((s)=>(<li>{sessions[s]}</li>))}
-                    </ul>
-                  </div>
-                </div>
-            )}
-          </div>
-        </div>
-        )}  
-</>
+      
+
   );
 }
