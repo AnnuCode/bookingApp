@@ -1,7 +1,7 @@
 
 
 
-import { useEffect, useRef} from "react"
+import { useEffect, useRef, useState} from "react"
 
 
 import {FaArrowRight} from "react-icons/fa"
@@ -10,63 +10,49 @@ import getData from "../../utils/api";
 import Spinner from "../UI/Spinner"
 
 
-export default function BookablesList ({state, dispatch}) {
+export default function BookablesList ({bookable, setBookable}) {
 
- 
+  const [err, setErr] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [bookables, setBookables] = useState([])
+  
   const nextButtonRef = useRef()
  
-
-  const {group, bookableIndex,  bookables} = state
-  const {isLoading, error} = state
-
-  
-
-  const bookablesInGroup = bookables.filter(b => b.group === group);
-
-  
-  
-
-  
-
-  
-
+  const bookablesInGroup = bookables.filter(b => b.group === bookable.group);
   const groups = [...new Set(bookables.map((b)=>b.group))]
+  const group = bookable?.group
 
-  
-
-  
-
-  useEffect(()=>{
-    dispatch({type: "FETCH_BOOKABLES_REQUEST"})
+ useEffect(()=>{
+   
     getData("https://my-json-server.typicode.com/AnnuCode/JSON/bookables")
-    .then(bookables=> 
-      dispatch({
-        type:"FETCH_BOOKABLES_SUCCESS",
-        payload: bookables}))
-
-        .catch(err => dispatch({
-        type:"FETCH_BOOKABLES_FAIL",
-        payload: err}))
-  
-  }, [dispatch])
-
-  function nextBookable(){
-    dispatch({
-      type: "NEXT_BOOKABLE",
+    .then(bookables => {
+      setBookable(bookables[0])
+      setIsLoading(false)
+      setBookables(bookables)
+      
       
     })
+      
+    .catch(error => {
+          setErr(error)
+          setIsLoading(false)
+        }
+          )
+  
+  }, [setBookable])
+
+  function nextBookable(){
+   const i = bookablesInGroup.indexOf(bookable)
+   const nextIndex = (i+1) % bookablesInGroup.length
+   const nextBookable = bookablesInGroup[nextIndex]
+   setBookable(nextBookable)
   }
   function changeGroup (e){
-    dispatch({
-      type: "SET_GROUP",
-      payload: e.target.value
-    })
+    const bookablesInSelectedGroup = bookables.filter(b => b.group === e.target.value)
+    setBookable(bookablesInSelectedGroup[0])
   }
-  function changeBookable (selectedIndex){
-    dispatch({
-      type: "SET_BOOKABLE",
-      payload: selectedIndex
-    })
+  function changeBookable (selectedBookable){
+    setBookable(selectedBookable)
     nextButtonRef.current.focus()
   }
   
@@ -75,8 +61,8 @@ export default function BookablesList ({state, dispatch}) {
     return <p> <Spinner /> Loading bookables... </p>
   }
 
-  if (error){
-    return <p> {error.message} </p>
+  if (err){
+    return <p> {err.message} </p>
   }
   return (
 
@@ -88,14 +74,14 @@ export default function BookablesList ({state, dispatch}) {
     </select>
 
     <ul className="bookables items-list-nav">
-      {bookablesInGroup.map((b, i) => (
+      {bookablesInGroup.map( b => (
         <li
           key={b.id}
-          className={i === bookableIndex ? "selected" : null}
+          className={b.id === bookable.id ? "selected" : null}
         >
           <button
             className="btn"
-            onClick={()=>changeBookable(i)}
+            onClick={()=>changeBookable(b)}
           >
             {b.title}
           </button>

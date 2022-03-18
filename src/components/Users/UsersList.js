@@ -3,19 +3,19 @@ import Spinner from "../UI/Spinner"
 import {useState, useEffect} from "react"
 import getData from "../../utils/api"
 
-export default function UsersList(){
+export default function UsersList({user, setUser}){
     const[users, setUsers] = useState(null)
-    const [userId, setUserId] = useState(1)
-    const[hasDetails, setHasDetails] = useState(false)
-    const currentUser = users?.[userId]
+    
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
    
    useEffect (() =>{
        getData("https://my-json-server.typicode.com/AnnuCode/JSON/users")
        .then(
-           resp=>{setUsers(resp)
+           resp=>{
+           setUsers(resp)
            setIsLoading(false)
+           setUser(resp[0]) // using resp instead of setUser(users[0]) because error tells cannot read properties of null[0], why?
            })
        .catch (err => {
            setError(err)
@@ -23,7 +23,7 @@ export default function UsersList(){
        }         
         
         )
-   }, [])
+   }, [setUser])
 
    if (error){
        return (
@@ -37,38 +37,20 @@ export default function UsersList(){
    }
    
     return(
-        <>
+        
         <div>
         <ul className=" users items-list-nav">
             {users.map((u,i)=>(
-                <li  key={u.id} className={i === userId? "selected" : null}>
+                <li  key={u.id} className={u.id=== user?.id? "selected" : null}>
                     <button className="btn"
-                    onClick={()=> setUserId(i)}>
+                    onClick={()=> setUser(u)}>
                         {u.name}
                     </button>
                 </li>
             ))}
         </ul>
         </div>
-       {
-           currentUser && (<div className="item user">
-               <div className="item-header">
-                   <h2>{currentUser.name}</h2>
-                   <span className="controls">
-                       <label>
-                           <input type="checkbox" onChange={()=>setHasDetails(has => !has)}/>
-                           Show Details
-                       </label>
-                 </span>
-               </div>
-                {hasDetails && <div className="user-details">
-                    <h3>{currentUser.title}</h3>
-                    <p>{currentUser.notes}</p>
-                    </div>}
-
-           </div>
-           )
-       }
-       </> 
+      
+       
     )
 }
