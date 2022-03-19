@@ -5,6 +5,8 @@ export default function BookingsGrid(props){
         <div className="bookings-grid placeholder">
             <h3>Bookings Grid</h3>
             <p>{bookable?.title}</p>
+            <p>{booking}</p>
+            <p>{setBooking}</p>
             <p>{week.date.toISOString()}</p>
 
         </div>        
