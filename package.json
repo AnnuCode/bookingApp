@@ -1,6 +1,6 @@
 {
   "name": "bookings-app",
-  "homepage": "https://AnnuCode.github.io/bookingApp",
+  
   "description": "A bookings app created to practice react hooks",
   "version": "0.2.1",
   "private": true,
