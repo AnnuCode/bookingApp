@@ -20,7 +20,7 @@ export default function Bookings({bookable}){
         <BookingsGrid week={week} booking={booking} setBooking={setBooking} bookable={bookable} /> {/* sharing week prop is important here */}
         
         </div>
-        <BookingsDetails booking={booking} bookable={bookable}  />
+        {/* <BookingsDetails booking={booking} bookable={bookable}  /> */}
         </div>
     )
 

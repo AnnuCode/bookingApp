@@ -6,13 +6,13 @@
 //{session: morning, date: 2020-08-13, bookableId: {bookable.id}, title:""}
 
 import {sessions as sessionNames} from "../../static.json"
-import shortISO from "../../utils/shortISO"
-import {addDays} from "../../utils/data-wrangler"
+import {shortISO, addDays} from "../../utils/data-wrangler"
 
 
-export default function GetGrid({bookable, startDate}){
+
+export function getGrid(bookable, startDate){
     const dates = bookable.days.sort().map( 
-        d=>shortISO( addDays(startDate, d) ) // to get the dates of the week for which we can book the selected bookable. Startdate represents the week we are interested in.
+        d=> shortISO( addDays(startDate, d) ) // to get the dates of the week for which we can book the selected bookable. Startdate represents the week we are interested in.
         )
     const sessions = bookable.sessions.sort().map(s=> sessionNames[s])
     const grid={}
@@ -23,7 +23,7 @@ export default function GetGrid({bookable, startDate}){
                 session,
                 date,
                 bookableId:bookable.id,
-                title: bookable.title 
+                title: "" 
             }
 
         })
