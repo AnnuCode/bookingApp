@@ -27,7 +27,7 @@ export default function WeekPicker ({dispatch}) {
                     <span> Today </span>
                     </button>
                     <span>
-                        <input type="text" ref={textBoxRef} placeholder="e.g. 2020-09-02"  />
+                        <input type="text" ref={textBoxRef} placeholder="e.g. 2020-09-02" defaultValue="2020-06-24"  />
 
                         
                         <button className="go btn" onClick={handleGo}>
